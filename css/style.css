@@ -192,3 +192,19 @@ video,
         padding: 6px 14px;
     }
 }
+
+/* Kursor Visual 2D Premium di Tengah Layar */
+#css-cursor {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px;
+    height: 18px;
+    border: 2px solid rgba(255, 255, 255, 0.8);
+    border-radius: 50%;
+    pointer-events: none; /* Sangat krusial: agar tidak menghalangi klik jari pengguna pada layar! */
+    z-index: 9999; /* Selalu berada di lapisan paling depan */
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+    transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
+}
