@@ -41,6 +41,21 @@
             <a-asset-item id="monster-model" src="monster_eye.glb"></a-asset-item>
         </a-assets>
         
+        <!-- Kamera Scene AR dengan Visual Kursor Terintegrasi (Kursor Terlihat di Tengah Layar) -->
+        <a-entity id="main-camera" camera>
+            <!-- Visual Kursor Cincin/Lingkaran di Tengah Layar -->
+            <a-entity 
+                cursor="fuse: false; rayOrigin: mouse" 
+                raycaster="objects: .clickable"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.012; radiusOuter: 0.02"
+                material="color: #ffffff; shader: flat; transparent: true; opacity: 0.6"
+                animation__click="property: scale; startEvents: click; easing: easeInCubic; dur: 150; from: 0.1 0.1 0.1; to: 1 1 1"
+                animation__fusing="property: scale; startEvents: fusing; easing: easeInCubic; dur: 1500; from: 1 1 1; to: 0.1 0.1 0.1"
+                animation__mouseleave="property: scale; startEvents: mouseleave; easing: easeInCubic; dur: 500; to: 1 1 1">
+            </a-entity>
+        </a-entity>
+        
         <!-- Custom Marker -->
         <!-- 
           type="pattern": Menggunakan pattern marker khusus (.patt).
@@ -232,9 +247,7 @@
             
         </a-marker>
 
-        <!-- Kamera Scene AR dengan Cursor Raycast terintegrasi agar stabil di mobile -->
-        <a-entity id="main-camera" camera cursor="rayOrigin: mouse" raycaster="objects: .clickable"></a-entity>
-        
+
     </a-scene>
 
     <!-- Floating UI Status Bar (2D Overlay) -->
