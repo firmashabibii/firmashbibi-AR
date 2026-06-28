@@ -23,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
     let lostTimeout = null;
+    let isVisualActive = false; // State global pelacak visibilitas hologram
 
     // 2. Event Listener ketika Custom Marker Terdeteksi oleh Kamera (markerFound)
     customMarker.addEventListener('markerFound', () => {
@@ -40,18 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         statusBar.classList.add('status-found');
         statusText.innerText = 'Marker Terdeteksi! Objek AR aktif';
 
-        // Deteksi apakah elemen-elemen AR saat ini sudah tampil (skala tidak 0)
-        const entranceElements = document.querySelectorAll('.entrance-element');
-        let isAlreadyVisible = true;
-        entranceElements.forEach(el => {
-            const currentScale = el.getAttribute('scale');
-            if (currentScale && currentScale.x === 0) {
-                isAlreadyVisible = false;
-            }
-        });
-
-        // Jalankan animasi masuk bertahap HANYA jika saat ini objek sedang tersembunyi
-        if (!isAlreadyVisible) {
+        // Jalankan animasi masuk bertahap HANYA jika visual AR saat ini belum aktif
+        if (!isVisualActive) {
+            isVisualActive = true; // Setel state menjadi aktif
+            const entranceElements = document.querySelectorAll('.entrance-element');
             entranceElements.forEach((element, index) => {
                 if (element.entranceTimeout) {
                     clearTimeout(element.entranceTimeout);
@@ -76,6 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
         lostTimeout = setTimeout(() => {
             console.log('Debouncing: Batas waktu habis. Menyembunyikan objek AR.');
             
+            isVisualActive = false; // Setel state kembali menjadi tidak aktif
+
             // Mengembalikan kelas styling ke status mencari
             statusBar.classList.remove('status-found');
             statusBar.classList.add('status-searching');
