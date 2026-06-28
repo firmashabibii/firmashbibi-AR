@@ -10,6 +10,25 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     
+    <!-- Monkey-patch getUserMedia aman untuk memaksa kamera belakang pada mobile browser tanpa merusak fallback stream -->
+    <script>
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
+            navigator.mediaDevices.getUserMedia = function(constraints) {
+                if (constraints && constraints.video) {
+                    if (typeof constraints.video === 'boolean') {
+                        constraints.video = {
+                            facingMode: 'environment'
+                        };
+                    } else if (typeof constraints.video === 'object') {
+                        constraints.video.facingMode = 'environment';
+                    }
+                }
+                return originalGetUserMedia(constraints);
+            };
+        }
+    </script>
+    
 
     <!-- Framework A-Frame (Versi stabil untuk AR.js) -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
@@ -81,7 +100,7 @@
     <!-- Scene AR.js -->
     <a-scene 
         embedded 
-        arjs="sourceType: webcam; videoParameters: { facingMode: 'environment' }; debugUIEnabled: false; smooth: true; smoothCount: 10; smoothTolerance: 0.02; smoothThreshold: 5;" 
+        arjs="sourceType: webcam; debugUIEnabled: false; smooth: true; smoothCount: 10; smoothTolerance: 0.02; smoothThreshold: 5;" 
         vr-mode-ui="enabled: false"
         renderer="antialias: true; colorManagement: true; sortObjects: true;">
         
