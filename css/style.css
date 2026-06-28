@@ -1,16 +1,15 @@
-/* Reset dasar dan penataan body & html untuk kenyamanan responsif mobile */
+/* === LAYOUT UTAMA === */
 html, body {
     margin: 0;
     padding: 0;
     width: 100%;
     height: 100%;
     overflow: hidden;
-    position: fixed; /* Menghindari bouncing scroll pada mobile browser */
+    position: fixed;
     font-family: 'Plus Jakarta Sans', sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Memastikan canvas rendering A-Frame/AR.js berada di latar belakang secara fixed */
 canvas.a-canvas {
     position: fixed !important;
     top: 0 !important;
@@ -20,10 +19,6 @@ canvas.a-canvas {
     z-index: 1 !important;
 }
 
-/* 
-   Memaksa video kamera bawaan AR.js agar terbentang penuh secara responsif 
-   dan menutup seluruh layar (mencegah masalah layar putih terbelah di mobile)
-*/
 video, 
 #arjs-webcam-generator-video {
     width: 100vw !important;
@@ -31,16 +26,13 @@ video,
     position: fixed !important;
     top: 0 !important;
     left: 0 !important;
-    object-fit: cover !important; /* Mengisi penuh layar dengan memotong proporsional */
+    object-fit: cover !important;
     margin: 0 !important;
     padding: 0 !important;
-    z-index: -100 !important; /* Berada di belakang objek 3D dan UI */
+    z-index: -100 !important;
 }
 
-/* 
-   Floating Status Bar di bagian bawah layar 
-   Menggunakan efek Glassmorphism premium
-*/
+/* === STATUS BAR (BOTTOM OVERLAY) === */
 #status-bar {
     position: fixed;
     bottom: 30px;
@@ -52,7 +44,7 @@ video,
     gap: 12px;
     padding: 14px 24px;
     border-radius: 50px;
-    background: rgba(15, 23, 42, 0.65); /* Warna dasar semi-transparan gelap */
+    background: rgba(15, 23, 42, 0.65);
     backdrop-filter: blur(16px) saturate(180%);
     -webkit-backdrop-filter: blur(16px) saturate(180%);
     border: 1px solid rgba(255, 255, 255, 0.1);
@@ -62,7 +54,6 @@ video,
     justify-content: center;
 }
 
-/* Teks Status */
 #status-text {
     color: #f8fafc;
     font-weight: 600;
@@ -71,7 +62,6 @@ video,
     transition: color 0.3s ease;
 }
 
-/* Indikator Status (Lingkaran Berdenyut) */
 .status-indicator {
     width: 10px;
     height: 10px;
@@ -80,17 +70,16 @@ video,
     transition: background-color 0.3s ease;
 }
 
-/* Gaya saat sedang mencari marker (Default / Searching) */
+/* Status: Searching */
 #status-bar.status-searching {
-    border-color: rgba(239, 68, 68, 0.2); /* Sentuhan merah halus */
+    border-color: rgba(239, 68, 68, 0.2);
 }
 
 #status-bar.status-searching .status-indicator {
-    background-color: #ef4444; /* Merah */
+    background-color: #ef4444;
     box-shadow: 0 0 12px #ef4444;
 }
 
-/* Efek berdenyut untuk status mencari */
 #status-bar.status-searching .status-indicator::after {
     content: '';
     position: absolute;
@@ -104,24 +93,23 @@ video,
     animation: pulse 1.8s infinite ease-out;
 }
 
-/* Gaya saat marker terdeteksi (Found) */
+/* Status: Found */
 #status-bar.status-found {
     background: rgba(15, 23, 42, 0.8);
-    border-color: rgba(16, 185, 129, 0.4); /* Sentuhan hijau terang */
+    border-color: rgba(16, 185, 129, 0.4);
     transform: translateX(-50%) scale(1.05);
     box-shadow: 0 15px 35px -10px rgba(16, 185, 129, 0.3);
 }
 
 #status-bar.status-found #status-text {
-    color: #10b981; /* Hijau Terang */
+    color: #10b981;
 }
 
 #status-bar.status-found .status-indicator {
-    background-color: #10b981; /* Hijau */
+    background-color: #10b981;
     box-shadow: 0 0 15px #10b981;
 }
 
-/* Efek berdenyut untuk status terdeteksi */
 #status-bar.status-found .status-indicator::after {
     content: '';
     position: absolute;
@@ -135,7 +123,7 @@ video,
     animation: pulse 1.5s infinite ease-out;
 }
 
-/* Overlay Petunjuk di bagian atas layar */
+/* === INSTRUCTION OVERLAY (TOP OVERLAY) === */
 #instruction-overlay {
     position: fixed;
     top: 25px;
@@ -161,7 +149,7 @@ video,
     font-weight: 700;
 }
 
-/* Animasi keyframe untuk denyut status */
+/* === ANIMASI PULSE === */
 @keyframes pulse {
     0% {
         transform: scale(0.6);
@@ -173,27 +161,27 @@ video,
     }
 }
 
-/* Responsivitas untuk layar kecil/ponsel pintar */
+/* === RESPONSIVITAS SELULER (MEDIA QUERY) === */
 @media (max-width: 480px) {
     #status-bar {
-        bottom: 45px; /* Ditinggikan agar aman dari swipe gesture bar iOS/Android */
+        bottom: 45px;
         padding: 10px 18px;
         min-width: unset;
-        width: 80%; /* Menggunakan persentase agar selalu pas di tengah layar */
+        width: 80%;
         max-width: 290px;
     }
     #status-text {
-        font-size: 0.85rem; /* Ukuran font lebih kecil agar tidak terpotong */
+        font-size: 0.85rem;
     }
     #instruction-overlay {
         width: 85%;
         font-size: 0.8rem;
-        top: 15px; /* Lebih dekat ke atas untuk menyisakan ruang tampilan AR */
+        top: 15px;
         padding: 6px 14px;
     }
 }
 
-/* Kursor Visual 2D Premium di Tengah Layar */
+/* === KURSOR VISUAL 2D HTML === */
 #css-cursor {
     position: fixed;
     top: 50%;
@@ -203,8 +191,8 @@ video,
     height: 18px;
     border: 2px solid rgba(255, 255, 255, 0.8);
     border-radius: 50%;
-    pointer-events: none; /* Sangat krusial: agar tidak menghalangi klik jari pengguna pada layar! */
-    z-index: 9999; /* Selalu berada di lapisan paling depan */
+    pointer-events: none;
+    z-index: 9999;
     box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
     transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease;
 }

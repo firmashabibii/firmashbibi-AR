@@ -1,49 +1,31 @@
-/**
- * Kartu Nama Interaktif WebAR
- * Logika UI untuk Deteksi Marker Kustom
- * 
- * File ini memisahkan logika UI dari file HTML utama untuk menjaga modularitas.
- * Menangani event 'markerFound' dan 'markerLost' dari framework AR.js.
- */
-
 document.addEventListener('DOMContentLoaded', () => {
-    // 1. Mengambil referensi elemen DOM yang diperlukan
+    
+    // === 1. INISIALISASI ELEMEN UI ===
     const customMarker = document.getElementById('custom-marker');
     const statusBar = document.getElementById('status-bar');
     const statusText = document.getElementById('status-text');
 
-    // Validasi dasar untuk memastikan elemen-elemen di atas tersedia di halaman
     if (!customMarker || !statusBar || !statusText) {
         console.error('Inisialisasi Gagal: Beberapa elemen UI tidak ditemukan.');
         return;
     }
 
-    console.log('Sistem WebAR terinisialisasi. Menunggu pemindaian marker kustom...');
-
-
-
     let lostTimeout = null;
-    let isVisualActive = false; // State global pelacak visibilitas hologram
+    let isVisualActive = false;
 
-    // 2. Event Listener ketika Custom Marker Terdeteksi oleh Kamera (markerFound)
+    // === 2. EVENT DETEKSI MARKER (MARKER FOUND) ===
     customMarker.addEventListener('markerFound', () => {
-        console.log('Event: Marker ditemukan! Memulai animasi masuk...');
-        
-        // Membatalkan rencana penyembunyian jika marker terdeteksi kembali sebelum batas waktu
         if (lostTimeout) {
             clearTimeout(lostTimeout);
             lostTimeout = null;
-            console.log('Debouncing: Deteksi dipulihkan. Membatalkan lost-hide.');
         }
 
-        // Memperbarui kelas styling pada Status Bar
         statusBar.classList.remove('status-searching');
         statusBar.classList.add('status-found');
         statusText.innerText = 'Marker Terdeteksi! Objek AR aktif';
 
-        // Jalankan animasi masuk bertahap HANYA jika visual AR saat ini belum aktif
         if (!isVisualActive) {
-            isVisualActive = true; // Setel state menjadi aktif
+            isVisualActive = true;
             const entranceElements = document.querySelectorAll('.entrance-element');
             entranceElements.forEach((element, index) => {
                 if (element.entranceTimeout) {
@@ -57,26 +39,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // 3. Event Listener ketika Custom Marker Hilang dari Pandangan Kamera (markerLost)
+    // === 3. EVENT KEHILANGAN MARKER (MARKER LOST) ===
     customMarker.addEventListener('markerLost', () => {
-        console.log('Event: Marker hilang! Menunggu debouncing 1.2 detik...');
-        
         if (lostTimeout) {
             clearTimeout(lostTimeout);
         }
 
-        // Berikan toleransi 1.2 detik sebelum menyembunyikan visual hologram
         lostTimeout = setTimeout(() => {
-            console.log('Debouncing: Batas waktu habis. Menyembunyikan objek AR.');
-            
-            isVisualActive = false; // Setel state kembali menjadi tidak aktif
+            isVisualActive = false;
 
-            // Mengembalikan kelas styling ke status mencari
             statusBar.classList.remove('status-found');
             statusBar.classList.add('status-searching');
             statusText.innerText = 'Mencari marker...';
 
-            // Mereset skala semua elemen menjadi 0
             const entranceElements = document.querySelectorAll('.entrance-element');
             entranceElements.forEach(element => {
                 if (element.entranceTimeout) {
@@ -86,24 +61,21 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             
             lostTimeout = null;
-        }, 1200); // 1.2 detik delay toleransi
+        }, 1200);
     });
 
-    // 4. Menangani interaksi klik pada tombol tautan 3D (.clickable) di WebAR
+    // === 4. INTERAKSI KLIK TOMBOL TAUTAN (CLICKABLE) ===
     const clickables = document.querySelectorAll('.clickable');
     clickables.forEach(element => {
         element.addEventListener('click', (event) => {
-            // Mengambil URL dari atribut data-url elemen yang diklik
             const url = event.currentTarget.getAttribute('data-url') || event.target.getAttribute('data-url');
             if (url) {
-                console.log(`Membuka tautan eksternal: ${url}`);
-                // Membuka tautan di tab baru secara aman
                 window.open(url, '_blank');
             }
         });
     });
 
-    // 5. Menangani efek Hover Tooltip untuk 3 tombol tautan
+    // === 5. HOVER TOOLTIP & FEEDBACK KURSOR HTML ===
     const tooltipsMapping = [
         { buttonId: 'btn-portfolio', tooltipId: 'tooltip-portfolio' },
         { buttonId: 'btn-github', tooltipId: 'tooltip-github' },
@@ -115,27 +87,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const tooltipEl = document.getElementById(mapping.tooltipId);
 
         if (buttonEl && tooltipEl) {
-            // Ketika kursor masuk (hover), picu animasi tampilkan tooltip dan beri feedback pada kursor visual
             buttonEl.addEventListener('mouseenter', () => {
-                console.log(`Hover in: ${mapping.buttonId}`);
                 tooltipEl.emit('show-tooltip');
                 
-                // Feedback visual pada kursor HTML (Membesar & Berubah Warna Hijau Stabil)
                 const cssCursor = document.getElementById('css-cursor');
                 if (cssCursor) {
-                    cssCursor.style.borderColor = '#10b981'; // Hijau Emerald
+                    cssCursor.style.borderColor = '#10b981';
                     cssCursor.style.width = '26px';
                     cssCursor.style.height = '26px';
                     cssCursor.style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.7)';
                 }
             });
 
-            // Ketika kursor keluar, sembunyikan kembali tooltip dan kembalikan gaya kursor
             buttonEl.addEventListener('mouseleave', () => {
-                console.log(`Hover out: ${mapping.buttonId}`);
                 tooltipEl.emit('hide-tooltip');
                 
-                // Mengembalikan kursor HTML ke bentuk default
                 const cssCursor = document.getElementById('css-cursor');
                 if (cssCursor) {
                     cssCursor.style.borderColor = 'rgba(255, 255, 255, 0.8)';
