@@ -1,9 +1,23 @@
-/* Reset dasar dan penataan body */
-body {
+/* Reset dasar dan penataan body & html untuk kenyamanan responsif mobile */
+html, body {
     margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    position: fixed; /* Menghindari bouncing scroll pada mobile browser */
     font-family: 'Plus Jakarta Sans', sans-serif;
     -webkit-tap-highlight-color: transparent;
+}
+
+/* Memastikan canvas rendering A-Frame/AR.js berada di latar belakang */
+canvas.a-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 1;
 }
 
 /* 
@@ -145,12 +159,19 @@ body {
 /* Responsivitas untuk layar kecil/ponsel pintar */
 @media (max-width: 480px) {
     #status-bar {
-        bottom: 20px;
-        padding: 12px 20px;
-        min-width: 240px;
+        bottom: 45px; /* Ditinggikan agar aman dari swipe gesture bar iOS/Android */
+        padding: 10px 18px;
+        min-width: unset;
+        width: 80%; /* Menggunakan persentase agar selalu pas di tengah layar */
+        max-width: 290px;
+    }
+    #status-text {
+        font-size: 0.85rem; /* Ukuran font lebih kecil agar tidak terpotong */
     }
     #instruction-overlay {
-        width: 80%;
+        width: 85%;
         font-size: 0.8rem;
+        top: 15px; /* Lebih dekat ke atas untuk menyisakan ruang tampilan AR */
+        padding: 6px 14px;
     }
 }
