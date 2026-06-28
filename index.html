@@ -48,37 +48,39 @@
             <!-- 
               position: Posisi awal melayang di atas marker.
               rotation: Kemiringan -60 derajat di sumbu X agar miring menghadap kamera user.
-              animation: Animasi melayang (levitasi) naik-turun secara serentak.
+              animation: Animasi melayang (levitasi) naik-turun lebih dramatis (rentang 20cm).
             -->
             <a-entity 
                 id="ar-content"
-                position="0 0.6 0" 
+                position="0 0.5 0" 
                 rotation="-60 0 0"
-                animation="property: position; to: 0 0.66 0; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine">
+                animation="property: position; to: 0 0.7 0; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine">
 
                 <!-- Gambar Biodata Utama -->
+                <!-- Menggunakan shader: flat agar gambar memancarkan warna aslinya secara penuh dan bebas bayangan -->
                 <a-image 
                     src="biodata.png" 
                     width="3.4" 
                     height="1.6" 
                     position="0 0 0"
-                    material="alphaTest: 0.5">
+                    material="shader: flat; transparent: true; alphaTest: 0.5">
                 </a-image>
 
-                <!-- === TOMBOL TAUTAN INTERAKTIF === -->
+                <!-- === TOMBOL TAUTAN INTERAKTIF (CYBERPUNK GLASS STYLE) === -->
 
                 <!-- Tombol 1: PORTFOLIO -->
-                <!-- Border Putih di Belakang -->
-                <a-plane width="0.94" height="0.32" color="#ffffff" position="-1.05 -1.05 0.005"></a-plane>
-                <!-- Tombol Utama -->
+                <!-- Border Merah Menyala -->
+                <a-plane width="0.94" height="0.32" color="#ff0022" position="-1.05 -1.15 0.005" material="shader: flat"></a-plane>
+                <!-- Tombol Utama (Glassmorphism Gelap) -->
                 <a-plane 
                     class="clickable" 
                     id="btn-portfolio" 
                     data-url="https://www.frmshbi.dev/" 
                     width="0.9" 
                     height="0.28" 
-                    color="#ff0022" 
-                    position="-1.05 -1.05 0.01">
+                    color="#0c0c0c" 
+                    position="-1.05 -1.15 0.01"
+                    material="shader: flat; opacity: 0.9; transparent: true">
                 </a-plane>
                 <a-text 
                     value="PORTFOLIO" 
@@ -86,23 +88,24 @@
                     width="2.3" 
                     color="#ffffff" 
                     font="https://cdn.aframe.io/fonts/DejaVu-sdf.json" 
-                    position="-1.05 -1.05 0.02"
+                    position="-1.05 -1.15 0.02"
                     class="clickable"
                     data-url="https://www.frmshbi.dev/">
                 </a-text>
 
                 <!-- Tombol 2: GITHUB -->
-                <!-- Border Putih di Belakang -->
-                <a-plane width="0.94" height="0.32" color="#ffffff" position="0 -1.05 0.005"></a-plane>
-                <!-- Tombol Utama -->
+                <!-- Border Merah Menyala -->
+                <a-plane width="0.94" height="0.32" color="#ff0022" position="0 -1.15 0.005" material="shader: flat"></a-plane>
+                <!-- Tombol Utama (Glassmorphism Gelap) -->
                 <a-plane 
                     class="clickable" 
                     id="btn-github" 
                     data-url="https://github.com/firmashabibii" 
                     width="0.9" 
                     height="0.28" 
-                    color="#ff0022" 
-                    position="0 -1.05 0.01">
+                    color="#0c0c0c" 
+                    position="0 -1.15 0.01"
+                    material="shader: flat; opacity: 0.9; transparent: true">
                 </a-plane>
                 <a-text 
                     value="GITHUB" 
@@ -110,23 +113,24 @@
                     width="2.3" 
                     color="#ffffff" 
                     font="https://cdn.aframe.io/fonts/DejaVu-sdf.json" 
-                    position="0 -1.05 0.02"
+                    position="0 -1.15 0.02"
                     class="clickable"
                     data-url="https://github.com/firmashabibii">
                 </a-text>
 
                 <!-- Tombol 3: INSTAGRAM -->
-                <!-- Border Putih di Belakang -->
-                <a-plane width="0.94" height="0.32" color="#ffffff" position="1.05 -1.05 0.005"></a-plane>
-                <!-- Tombol Utama -->
+                <!-- Border Merah Menyala -->
+                <a-plane width="0.94" height="0.32" color="#ff0022" position="1.05 -1.15 0.005" material="shader: flat"></a-plane>
+                <!-- Tombol Utama (Glassmorphism Gelap) -->
                 <a-plane 
                     class="clickable" 
                     id="btn-instagram" 
                     data-url="https://www.instagram.com/frmshbi/" 
                     width="0.9" 
                     height="0.28" 
-                    color="#ff0022" 
-                    position="1.05 -1.05 0.01">
+                    color="#0c0c0c" 
+                    position="1.05 -1.15 0.01"
+                    material="shader: flat; opacity: 0.9; transparent: true">
                 </a-plane>
                 <a-text 
                     value="INSTAGRAM" 
@@ -134,7 +138,7 @@
                     width="2.3" 
                     color="#ffffff" 
                     font="https://cdn.aframe.io/fonts/DejaVu-sdf.json" 
-                    position="1.05 -1.05 0.02"
+                    position="1.05 -1.15 0.02"
                     class="clickable"
                     data-url="https://www.instagram.com/frmshbi/">
                 </a-text>
