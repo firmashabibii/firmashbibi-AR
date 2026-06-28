@@ -1,0 +1,156 @@
+/* Reset dasar dan penataan body */
+body {
+    margin: 0;
+    overflow: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+/* 
+   Floating Status Bar di bagian bawah layar 
+   Menggunakan efek Glassmorphism premium
+*/
+#status-bar {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 24px;
+    border-radius: 50px;
+    background: rgba(15, 23, 42, 0.65); /* Warna dasar semi-transparan gelap */
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    min-width: 280px;
+    justify-content: center;
+}
+
+/* Teks Status */
+#status-text {
+    color: #f8fafc;
+    font-weight: 600;
+    font-size: 0.95rem;
+    letter-spacing: 0.3px;
+    transition: color 0.3s ease;
+}
+
+/* Indikator Status (Lingkaran Berdenyut) */
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    position: relative;
+    transition: background-color 0.3s ease;
+}
+
+/* Gaya saat sedang mencari marker (Default / Searching) */
+#status-bar.status-searching {
+    border-color: rgba(239, 68, 68, 0.2); /* Sentuhan merah halus */
+}
+
+#status-bar.status-searching .status-indicator {
+    background-color: #ef4444; /* Merah */
+    box-shadow: 0 0 12px #ef4444;
+}
+
+/* Efek berdenyut untuk status mencari */
+#status-bar.status-searching .status-indicator::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px solid #ef4444;
+    opacity: 0;
+    animation: pulse 1.8s infinite ease-out;
+}
+
+/* Gaya saat marker terdeteksi (Found) */
+#status-bar.status-found {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(16, 185, 129, 0.4); /* Sentuhan hijau terang */
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 15px 35px -10px rgba(16, 185, 129, 0.3);
+}
+
+#status-bar.status-found #status-text {
+    color: #10b981; /* Hijau Terang */
+}
+
+#status-bar.status-found .status-indicator {
+    background-color: #10b981; /* Hijau */
+    box-shadow: 0 0 15px #10b981;
+}
+
+/* Efek berdenyut untuk status terdeteksi */
+#status-bar.status-found .status-indicator::after {
+    content: '';
+    position: absolute;
+    top: -5px;
+    left: -5px;
+    right: -5px;
+    bottom: -5px;
+    border-radius: 50%;
+    border: 2px solid #10b981;
+    opacity: 0;
+    animation: pulse 1.5s infinite ease-out;
+}
+
+/* Overlay Petunjuk di bagian atas layar */
+#instruction-overlay {
+    position: fixed;
+    top: 25px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 1000;
+    color: rgba(255, 255, 255, 0.85);
+    font-size: 0.9rem;
+    font-weight: 500;
+    background: rgba(15, 23, 42, 0.4);
+    padding: 8px 18px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    pointer-events: none;
+    text-align: center;
+    letter-spacing: 0.5px;
+}
+
+#instruction-overlay strong {
+    color: #00FFA3;
+    font-weight: 700;
+}
+
+/* Animasi keyframe untuk denyut status */
+@keyframes pulse {
+    0% {
+        transform: scale(0.6);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(2);
+        opacity: 0;
+    }
+}
+
+/* Responsivitas untuk layar kecil/ponsel pintar */
+@media (max-width: 480px) {
+    #status-bar {
+        bottom: 20px;
+        padding: 12px 20px;
+        min-width: 240px;
+    }
+    #instruction-overlay {
+        width: 80%;
+        font-size: 0.8rem;
+    }
+}

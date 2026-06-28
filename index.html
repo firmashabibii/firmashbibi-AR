@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kartu Nama Interaktif WebAR</title>
+    
+    <!-- Link Font Google (Outfit & Plus Jakarta Sans) untuk Tampilan Premium -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- Framework A-Frame (Versi stabil untuk AR.js) -->
+    <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
+    
+    <!-- Framework AR.js untuk A-Frame -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+    
+    <!-- File CSS Kustom -->
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body style="margin: 0; overflow: hidden; font-family: 'Plus Jakarta Sans', sans-serif;">
+
+    <!-- Scene AR.js -->
+    <!-- 
+      embedded: Memungkinkan scene berada di dalam layout HTML.
+      arjs: Konfigurasi sumber webcam dan menghilangkan debug UI bawaan AR.js agar lebih bersih.
+      vr-mode-ui: Dinonaktifkan karena kita menggunakan AR genggam/webcam, bukan VR headset.
+    -->
+    <a-scene 
+        embedded 
+        arjs="sourceType: webcam; debugUIEnabled: false;" 
+        vr-mode-ui="enabled: false"
+        renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
+        
+        <!-- Asset Management System untuk efisiensi pemuatan aset -->
+        <a-assets>
+            <!-- Model 3D GLTF (Damaged Helmet sebagai model default yang futuristik & premium) -->
+            <!-- Anda bisa mengganti URL src ini dengan file lokal Anda, misal: "assets/laptop.gltf" -->
+            <a-asset-item id="model-3d" src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"></a-asset-item>
+        </a-assets>
+
+        <!-- Custom Marker -->
+        <!-- 
+          type="pattern": Menggunakan pattern marker khusus (.patt).
+          url="pattern-realmadrid.patt": Mengarah ke file marker kustom di root proyek.
+          id="custom-marker": Digunakan oleh JS untuk mendeteksi event markerFound/markerLost.
+        -->
+        <a-marker type="pattern" url="pattern-realmadrid.patt" id="custom-marker">
+            
+            <!-- Elemen Model 3D GLTF -->
+            <!-- 
+              gltf-model: Mereferensikan id aset (#model-3d).
+              position: Diletakkan sedikit melayang di atas marker (y = 0.5).
+              scale: Diatur secara proporsional agar pas di atas marker kartu nama.
+              animation: Animasi berputar 360 derajat terus menerus pada sumbu Y.
+              animation__hover: Animasi levitasi naik turun (melayang) secara berulang.
+            -->
+            <a-gltf-model 
+                src="#model-3d" 
+                position="0 0.5 0" 
+                scale="0.6 0.6 0.6"
+                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
+                animation__hover="property: position; to: 0 0.7 0; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine">
+            </a-gltf-model>
+
+            <!-- Elemen Teks AR (Minimal 2 Elemen Teks) -->
+            <!-- 
+              Elemen 1: Nama Saya
+              position: Berada di depan model, sedikit ke bawah.
+              rotation: Dirotasi agar sejajar/mudah dibaca dari sudut pandang kamera depan marker (-90 0 0).
+              align: Sentralisasi teks agar rapi.
+            -->
+            <a-text 
+                value="Firmas Habibi" 
+                position="0 0.1 0.8" 
+                rotation="-90 0 0" 
+                align="center" 
+                color="#00FFA3" 
+                width="3.5"
+                font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
+                font-image="https://cdn.aframe.io/fonts/DejaVu-sdf.png"
+                anchor="center">
+            </a-text>
+
+            <!-- 
+              Elemen 2: Peran / Skill Saya
+              position: Berada di bawah elemen nama.
+              rotation: Sama dengan elemen nama agar sejajar.
+            -->
+            <a-text 
+                value="WebAR Developer & Designer" 
+                position="0 0.1 1.1" 
+                rotation="-90 0 0" 
+                align="center" 
+                color="#FFFFFF" 
+                width="2.5"
+                font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
+                font-image="https://cdn.aframe.io/fonts/DejaVu-sdf.png"
+                anchor="center">
+            </a-text>
+            
+        </a-marker>
+
+        <!-- Kamera Scene AR -->
+        <a-entity camera></a-entity>
+        
+    </a-scene>
+
+    <!-- Floating UI Status Bar (2D Overlay) -->
+    <div id="status-bar" class="status-searching">
+        <div class="status-indicator"></div>
+        <span id="status-text">Mencari marker...</span>
+    </div>
+
+    <!-- Petunjuk Kamera untuk User -->
+    <div id="instruction-overlay">
+        Arahkan kamera ke <strong>Pattern Marker</strong> Anda
+    </div>
+
+    <!-- Script JS Kustom untuk Logika UI -->
+    <script src="js/main.js"></script>
+</body>
+</html>
