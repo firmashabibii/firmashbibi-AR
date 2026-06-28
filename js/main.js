@@ -22,54 +22,76 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+    let lostTimeout = null;
+
     // 2. Event Listener ketika Custom Marker Terdeteksi oleh Kamera (markerFound)
     customMarker.addEventListener('markerFound', () => {
-        console.log('Event: Marker ditemukan! Memulai animasi masuk berurutan...');
+        console.log('Event: Marker ditemukan! Memulai animasi masuk...');
         
+        // Membatalkan rencana penyembunyian jika marker terdeteksi kembali sebelum batas waktu
+        if (lostTimeout) {
+            clearTimeout(lostTimeout);
+            lostTimeout = null;
+            console.log('Debouncing: Deteksi dipulihkan. Membatalkan lost-hide.');
+        }
+
         // Memperbarui kelas styling pada Status Bar
         statusBar.classList.remove('status-searching');
         statusBar.classList.add('status-found');
-        
-        // Memperbarui teks pesan
         statusText.innerText = 'Marker Terdeteksi! Objek AR aktif';
 
-        // Memicu animasi masuk berurutan (staggered entrance) untuk setiap komponen melayang
+        // Deteksi apakah elemen-elemen AR saat ini sudah tampil (skala tidak 0)
         const entranceElements = document.querySelectorAll('.entrance-element');
-        entranceElements.forEach((element, index) => {
-            // Bersihkan timeout sebelumnya jika ada agar tidak bentrok
-            if (element.entranceTimeout) {
-                clearTimeout(element.entranceTimeout);
+        let isAlreadyVisible = true;
+        entranceElements.forEach(el => {
+            const currentScale = el.getAttribute('scale');
+            if (currentScale && currentScale.x === 0) {
+                isAlreadyVisible = false;
             }
-            
-            // Atur skala awal ke 0 0 0
-            element.setAttribute('scale', '0 0 0');
-            
-            // Jalankan animasi masuk dengan jeda bertahap (150 milidetik per elemen)
-            element.entranceTimeout = setTimeout(() => {
-                element.emit('show-element');
-            }, index * 150);
         });
+
+        // Jalankan animasi masuk bertahap HANYA jika saat ini objek sedang tersembunyi
+        if (!isAlreadyVisible) {
+            entranceElements.forEach((element, index) => {
+                if (element.entranceTimeout) {
+                    clearTimeout(element.entranceTimeout);
+                }
+                element.setAttribute('scale', '0 0 0');
+                element.entranceTimeout = setTimeout(() => {
+                    element.emit('show-element');
+                }, index * 150);
+            });
+        }
     });
 
     // 3. Event Listener ketika Custom Marker Hilang dari Pandangan Kamera (markerLost)
     customMarker.addEventListener('markerLost', () => {
-        console.log('Event: Marker hilang! Mereset animasi...');
+        console.log('Event: Marker hilang! Menunggu debouncing 1.2 detik...');
         
-        // Mengembalikan kelas styling ke status mencari
-        statusBar.classList.remove('status-found');
-        statusBar.classList.add('status-searching');
-        
-        // Mengembalikan teks pesan ke pencarian default
-        statusText.innerText = 'Mencari marker...';
+        if (lostTimeout) {
+            clearTimeout(lostTimeout);
+        }
 
-        // Mereset skala semua elemen menjadi 0 agar animasi terulang dari awal saat marker terdeteksi lagi
-        const entranceElements = document.querySelectorAll('.entrance-element');
-        entranceElements.forEach(element => {
-            if (element.entranceTimeout) {
-                clearTimeout(element.entranceTimeout);
-            }
-            element.setAttribute('scale', '0 0 0');
-        });
+        // Berikan toleransi 1.2 detik sebelum menyembunyikan visual hologram
+        lostTimeout = setTimeout(() => {
+            console.log('Debouncing: Batas waktu habis. Menyembunyikan objek AR.');
+            
+            // Mengembalikan kelas styling ke status mencari
+            statusBar.classList.remove('status-found');
+            statusBar.classList.add('status-searching');
+            statusText.innerText = 'Mencari marker...';
+
+            // Mereset skala semua elemen menjadi 0
+            const entranceElements = document.querySelectorAll('.entrance-element');
+            entranceElements.forEach(element => {
+                if (element.entranceTimeout) {
+                    clearTimeout(element.entranceTimeout);
+                }
+                element.setAttribute('scale', '0 0 0');
+            });
+            
+            lostTimeout = null;
+        }, 1200); // 1.2 detik delay toleransi
     });
 
     // 4. Menangani interaksi klik pada tombol tautan 3D (.clickable) di WebAR
