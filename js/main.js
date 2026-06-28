@@ -43,4 +43,18 @@ document.addEventListener('DOMContentLoaded', () => {
         // Mengembalikan teks pesan ke pencarian default
         statusText.innerText = 'Mencari marker...';
     });
+
+    // 4. Menangani interaksi klik pada tombol tautan 3D (.clickable) di WebAR
+    const clickables = document.querySelectorAll('.clickable');
+    clickables.forEach(element => {
+        element.addEventListener('click', (event) => {
+            // Mengambil URL dari atribut data-url elemen yang diklik
+            const url = event.currentTarget.getAttribute('data-url') || event.target.getAttribute('data-url');
+            if (url) {
+                console.log(`Membuka tautan eksternal: ${url}`);
+                // Membuka tautan di tab baru secara aman
+                window.open(url, '_blank');
+            }
+        });
+    });
 });

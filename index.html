@@ -31,7 +31,9 @@
         embedded 
         arjs="sourceType: webcam; debugUIEnabled: false;" 
         vr-mode-ui="enabled: false"
-        renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
+        renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;"
+        cursor="rayOrigin: mouse"
+        raycaster="objects: .clickable">
         
 
         <!-- Custom Marker -->
@@ -42,22 +44,102 @@
         -->
         <a-marker type="pattern" url="pattern-pening.patt" id="custom-marker">
             
-            <!-- Gambar Biodata 3D Mengambang -->
+            <!-- Grup Konten AR (Melayang Bersama secara Elegan) -->
             <!-- 
-              src="biodata.png": Gambar biodata utuh yang diunggah oleh Anda.
-              position: Diletakkan sedikit melayang di atas marker.
-              rotation: Kemiringan -60 derajat di sumbu X agar menghadap ke arah kamera user dengan nyaman.
-              animation: Efek melayang (levitasi) naik-turun yang halus secara berulang.
+              position: Posisi awal melayang di atas marker.
+              rotation: Kemiringan -60 derajat di sumbu X agar miring menghadap kamera user.
+              animation: Animasi melayang (levitasi) naik-turun secara serentak.
             -->
-            <a-image 
-                src="biodata.png" 
-                width="3.4" 
-                height="1.6" 
+            <a-entity 
+                id="ar-content"
                 position="0 0.6 0" 
                 rotation="-60 0 0"
-                material="alphaTest: 0.5"
                 animation="property: position; to: 0 0.66 0; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine">
-            </a-image>
+
+                <!-- Gambar Biodata Utama -->
+                <a-image 
+                    src="biodata.png" 
+                    width="3.4" 
+                    height="1.6" 
+                    position="0 0 0"
+                    material="alphaTest: 0.5">
+                </a-image>
+
+                <!-- === TOMBOL TAUTAN INTERAKTIF === -->
+
+                <!-- Tombol 1: PORTFOLIO -->
+                <!-- Border Putih di Belakang -->
+                <a-plane width="0.94" height="0.32" color="#ffffff" position="-1.05 -1.05 0.005"></a-plane>
+                <!-- Tombol Utama -->
+                <a-plane 
+                    class="clickable" 
+                    id="btn-portfolio" 
+                    data-url="https://www.frmshbi.dev/" 
+                    width="0.9" 
+                    height="0.28" 
+                    color="#ff0022" 
+                    position="-1.05 -1.05 0.01">
+                </a-plane>
+                <a-text 
+                    value="PORTFOLIO" 
+                    align="center" 
+                    width="2.3" 
+                    color="#ffffff" 
+                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json" 
+                    position="-1.05 -1.05 0.02"
+                    class="clickable"
+                    data-url="https://www.frmshbi.dev/">
+                </a-text>
+
+                <!-- Tombol 2: GITHUB -->
+                <!-- Border Putih di Belakang -->
+                <a-plane width="0.94" height="0.32" color="#ffffff" position="0 -1.05 0.005"></a-plane>
+                <!-- Tombol Utama -->
+                <a-plane 
+                    class="clickable" 
+                    id="btn-github" 
+                    data-url="https://github.com/firmashabibii" 
+                    width="0.9" 
+                    height="0.28" 
+                    color="#ff0022" 
+                    position="0 -1.05 0.01">
+                </a-plane>
+                <a-text 
+                    value="GITHUB" 
+                    align="center" 
+                    width="2.3" 
+                    color="#ffffff" 
+                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json" 
+                    position="0 -1.05 0.02"
+                    class="clickable"
+                    data-url="https://github.com/firmashabibii">
+                </a-text>
+
+                <!-- Tombol 3: INSTAGRAM -->
+                <!-- Border Putih di Belakang -->
+                <a-plane width="0.94" height="0.32" color="#ffffff" position="1.05 -1.05 0.005"></a-plane>
+                <!-- Tombol Utama -->
+                <a-plane 
+                    class="clickable" 
+                    id="btn-instagram" 
+                    data-url="https://www.instagram.com/frmshbi/" 
+                    width="0.9" 
+                    height="0.28" 
+                    color="#ff0022" 
+                    position="1.05 -1.05 0.01">
+                </a-plane>
+                <a-text 
+                    value="INSTAGRAM" 
+                    align="center" 
+                    width="2.3" 
+                    color="#ffffff" 
+                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json" 
+                    position="1.05 -1.05 0.02"
+                    class="clickable"
+                    data-url="https://www.instagram.com/frmshbi/">
+                </a-text>
+
+            </a-entity>
             
         </a-marker>
 
