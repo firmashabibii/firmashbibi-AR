@@ -33,12 +33,10 @@
         vr-mode-ui="enabled: false"
         renderer="antialias: true; colorManagement: true; sortObjects: true;">
         
-        <!-- Asset Management System untuk mendefinisikan tekstur tombol rounded rect dan kartu -->
+        <!-- Asset Management System untuk mendefinisikan tekstur tombol rounded rect -->
         <a-assets>
             <canvas id="button-bg-canvas" width="256" height="80"></canvas>
             <canvas id="button-border-canvas" width="264" height="88"></canvas>
-            <canvas id="card-bg-canvas" width="680" height="360"></canvas>
-            <canvas id="card-border-canvas" width="688" height="368"></canvas>
         </a-assets>
 
         <!-- Custom Marker -->
@@ -61,60 +59,54 @@
                 rotation="-60 0 0"
                 animation="property: position; to: 0 0.7 0; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine">
 
-                <!-- === KARTU LATAR BELAKANG BIODATA (SUDUT BULAT) === -->
-                <!-- Border Merah Menyala Bulat -->
-                <a-plane src="#card-border-canvas" width="3.44" height="1.84" position="0 0 0" material="shader: flat; transparent: true;"></a-plane>
-                <!-- Panel Utama Hitam Bulat -->
-                <a-plane src="#card-bg-canvas" width="3.4" height="1.8" position="0 0 0.01" material="shader: flat; transparent: true;"></a-plane>
-
-                <!-- === FOTO PROFIL CYBERPUNK === -->
+                <!-- === FOTO PROFIL CYBERPUNK (MELAYANG MANDIRI DI SEBELAH KIRI) === -->
                 <!-- Border Merah Foto -->
-                <a-plane width="1.06" height="1.26" color="#ff0022" position="-1.0 0 0.02" material="shader: flat;"></a-plane>
+                <a-plane width="1.06" height="1.26" color="#ff0022" position="-0.9 0 0" material="shader: flat;"></a-plane>
                 <!-- Gambar Foto Profil -->
-                <a-image src="profile.jpg" width="1.0" height="1.2" position="-1.0 0 0.03" material="shader: flat;"></a-image>
+                <a-image src="profile.jpg" width="1.0" height="1.2" position="-0.9 0 0.01" material="shader: flat;"></a-image>
 
-                <!-- === HEADER KARTU BIODATA === -->
+                <!-- === HEADER BIODATA (MELAYANG MANDIRI) === -->
                 <!-- "// BIODATA" -->
                 <a-text 
                     value="// BIODATA" 
                     color="#ff0022" 
-                    width="3.2" 
-                    position="-1.5 0.75 0.02" 
+                    width="3.0" 
+                    position="-0.9 0.75 0" 
                     anchor="left">
                 </a-text>
                 <!-- "ID_FRM205" -->
                 <a-text 
                     value="ID_FRM205" 
                     color="#ff0022" 
-                    width="2.5" 
-                    position="1.5 0.75 0.02" 
+                    width="2.2" 
+                    position="1.3 0.75 0" 
                     align="right"
                     anchor="right">
                 </a-text>
-                <!-- Garis Horizontal Cyberpunk -->
-                <a-plane width="3.0" height="0.01" color="#ff0022" position="0 0.62 0.02" material="shader: flat;"></a-plane>
+                <!-- Garis Horizontal Cyberpunk Pembatas Teks Penjelasan -->
+                <a-plane width="2.1" height="0.01" color="#ff0022" position="0.25 0.62 0" material="shader: flat;"></a-plane>
 
-                <!-- === DETAIL DATA BIODATA (TEKS SEBAGAI TEXTURE SDF YANG TAJAM) === -->
+                <!-- === DETAIL DATA BIODATA (MELAYANG MANDIRI DENGAN TEKS VEKTOR SDF TAJAM) === -->
                 <!-- Baris 1: FULL NAME -->
-                <a-text value="FULL NAME //" color="#ff0022" width="2.0" position="-0.3 0.4 0.02" anchor="left"></a-text>
-                <a-text value="FIRMAS HABIBI" color="#ffffff" width="2.2" position="0.3 0.4 0.02" anchor="left"></a-text>
+                <a-text value="FULL NAME //" color="#ff0022" width="2.0" position="-0.2 0.4 0" anchor="left"></a-text>
+                <a-text value="FIRMAS HABIBI" color="#ffffff" width="2.2" position="0.4 0.4 0" anchor="left"></a-text>
 
                 <!-- Baris 2: ROLE -->
-                <a-text value="ROLE //" color="#ff0022" width="2.0" position="-0.3 0.15 0.02" anchor="left"></a-text>
-                <a-text value="FULLSTACK ENGGINEER" color="#ffffff" width="2.2" position="0.3 0.15 0.02" anchor="left"></a-text>
+                <a-text value="ROLE //" color="#ff0022" width="2.0" position="-0.2 0.15 0" anchor="left"></a-text>
+                <a-text value="FULLSTACK ENGGINEER" color="#ffffff" width="2.2" position="0.4 0.15 0" anchor="left"></a-text>
 
                 <!-- Baris 3: CORE STACK -->
-                <a-text value="CORE STACK //" color="#ff0022" width="2.0" position="-0.3 -0.1 0.02" anchor="left"></a-text>
-                <a-text value="REACT - NODE.JS" color="#ffffff" width="2.2" position="0.3 -0.1 0.02" anchor="left"></a-text>
+                <a-text value="CORE STACK //" color="#ff0022" width="2.0" position="-0.2 -0.1 0" anchor="left"></a-text>
+                <a-text value="REACT - NODE.JS" color="#ffffff" width="2.2" position="0.4 -0.1 0" anchor="left"></a-text>
 
                 <!-- Baris 4: LOCATION -->
-                <a-text value="LOCATION //" color="#ff0022" width="2.0" position="-0.3 -0.35 0.02" anchor="left"></a-text>
-                <a-text value="INDONESIA - SUMATERA UTARA" color="#ffffff" width="2.2" position="0.3 -0.35 0.02" anchor="left"></a-text>
+                <a-text value="LOCATION //" color="#ff0022" width="2.0" position="-0.2 -0.35 0" anchor="left"></a-text>
+                <a-text value="INDONESIA - SUMATERA UTARA" color="#ffffff" width="2.2" position="0.4 -0.35 0" anchor="left"></a-text>
 
                 <!-- Baris 5: FOCUS -->
-                <a-text value="FOCUS //" color="#ff0022" width="2.0" position="-0.3 -0.6 0.02" anchor="left"></a-text>
-                <a-text value="HIGH-PERFORMANCE SYSTEMS &" color="#ffffff" width="2.2" position="0.3 -0.55 0.02" anchor="left"></a-text>
-                <a-text value="INTERACTIVE APPS" color="#ffffff" width="2.2" position="0.3 -0.72 0.02" anchor="left"></a-text>
+                <a-text value="FOCUS //" color="#ff0022" width="2.0" position="-0.2 -0.6 0" anchor="left"></a-text>
+                <a-text value="HIGH-PERFORMANCE SYSTEMS &" color="#ffffff" width="2.2" position="0.4 -0.55 0" anchor="left"></a-text>
+                <a-text value="INTERACTIVE APPS" color="#ffffff" width="2.2" position="0.4 -0.72 0" anchor="left"></a-text>
 
 
                 <!-- === TOMBOL TAUTAN INTERAKTIF (SUDUT BULAT) === -->
