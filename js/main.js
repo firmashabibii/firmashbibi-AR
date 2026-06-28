@@ -47,6 +47,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Menggambar tekstur tombol bersudut melengkung (radius 18px dan 20px agar proporsional)
     drawRoundedRect('button-bg-canvas', '#0c0c0c', 18);
     drawRoundedRect('button-border-canvas', '#ff0022', 20);
+    
+    // Menggambar tekstur kartu biodata bersudut melengkung (radius 36px dan 40px untuk kartu)
+    drawRoundedRect('card-bg-canvas', '#0a0a0a', 36);
+    drawRoundedRect('card-border-canvas', '#ff0022', 40);
 
     // 2. Event Listener ketika Custom Marker Terdeteksi oleh Kamera (markerFound)
     customMarker.addEventListener('markerFound', () => {
