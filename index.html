@@ -44,17 +44,197 @@
             <a-asset-item id="monster-model" src="monster_eye.glb"></a-asset-item>
         </a-assets>
         
-        <!-- Kamera Scene AR dengan Raycaster Tengah Layar Tak Terlihat (Tidak Menghalangi Klik Jari) -->
+        <!-- Kamera Scene AR dengan Visual Kursor & Grup HUD Menempel di Layar -->
         <a-entity id="main-camera" camera>
+            <!-- Detektor Raycast sentuh layar langsung (tap layar) secara stabil di Mobile -->
+            <a-entity 
+                cursor="rayOrigin: mouse" 
+                raycaster="objects: .clickable; interval: 100;">
+            </a-entity>
+
             <!-- 
-              Sinar raycast tak terlihat memancar tepat dari tengah kamera ke depan.
-              Tidak memiliki mesh 3D sehingga tidak menghalangi sentuhan jari di layar.
-              Mendukung kendali ganda: bidik otomatis selama 1.2 detik (fuse) atau ketukan layar langsung di mana saja.
+              Grup Konten AR HUD (Menetap Statis di Layar HP, di sebelah kiri)
+              position: X = -0.15 (sedikit geser ke kiri agar seimbang), Y = 0.0, Z = -2.0 (melayang di depan mata kamera)
+              rotation: 0 0 0 (tegak lurus sejajar pandangan layar kamera)
             -->
             <a-entity 
-                cursor="fuse: true; fuseTimeout: 1200" 
-                raycaster="objects: .clickable; far: 10; interval: 50;"
-                position="0 0 -1">
+                id="ar-content"
+                position="-0.15 0 -2.0" 
+                rotation="0 0 0">
+
+                <!-- === FOTO PROFIL CYBERPUNK (HUD Kiri - Efek Hover Membesar) === -->
+                <a-entity class="entrance-element" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 700; easing: easeOutBack; startEvents: show-element">
+                    <a-image 
+                        class="clickable" 
+                        src="profile_rounded.png" 
+                        width="0.5" 
+                        height="0.65" 
+                        position="-0.65 0.05 0" 
+                        material="shader: flat; transparent: true;"
+                        animation__mouseenter="property: scale; to: 1.1 1.1 1.1; dur: 200; easing: easeOutQuad; startEvents: mouseenter"
+                        animation__mouseleave="property: scale; to: 1 1 1; dur: 200; easing: easeOutQuad; startEvents: mouseleave">
+                    </a-image>
+                </a-entity>
+
+                <!-- === MODEL 3D MATA MONSTER PROSEDURAL (HUD Kiri - Melayang Di Atas Profil & Melirik Mengejar Pointer) === -->
+                <a-entity class="entrance-element" scale="0 0 0" animation="property: scale; to: 0.6 0.6 0.6; dur: 800; easing: easeOutBack; startEvents: show-element">
+                    <!-- Kelopak Mata & Sclera Putih Statis -->
+                    <a-entity position="-0.65 0.55 0.05">
+                        <a-sphere color="#0c0c0c" radius="0.18" material="shader: flat;"></a-sphere>
+                        <a-sphere color="#ffffff" radius="0.17" material="shader: flat;"></a-sphere>
+                    </a-entity>
+                    <!-- Pupil & Iris Dinamis yang melirik mengejar arah kursor lewat JS -->
+                    <a-entity id="monster-pupil" position="-0.65 0.55 0.05">
+                        <a-sphere color="#ff0022" radius="0.07" position="0 0 0.14" material="shader: flat;"></a-sphere>
+                        <a-sphere color="#000000" radius="0.03" position="0 0 0.19" material="shader: flat;"></a-sphere>
+                        <a-sphere color="#ffffff" radius="0.01" position="0.03 0.03 0.20" material="shader: flat;"></a-sphere>
+                    </a-entity>
+                </a-entity>
+
+                <!-- === 5 BARIS PENJELASAN BIODATA (HUD Kanan - Strip Hitam) === -->
+                
+                <!-- Baris 1: FULL NAME -->
+                <a-entity class="entrance-element" position="0.3 0.33 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
+                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="1.1" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                    <!-- Label & Value diposisikan secara lokal relatif terhadap strip hitam (Aman 100% di dalam strip) -->
+                    <a-text value="FULL NAME //" color="#b0b0b0" width="0.65" wrap-count="18" position="-0.5 0 0.01" anchor="left" font="exo2bold"></a-text>
+                    <a-text value="FIRMAS HABIBI" color="#ffffff" width="0.6" wrap-count="18" position="-0.02 0 0.01" anchor="left" font="exo2bold"></a-text>
+                </a-entity>
+
+                <!-- Baris 2: ROLE -->
+                <a-entity class="entrance-element" position="0.3 0.19 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
+                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="1.1" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                    <a-text value="ROLE //" color="#b0b0b0" width="0.65" wrap-count="18" position="-0.5 0 0.01" anchor="left" font="exo2bold"></a-text>
+                    <a-text value="FULLSTACK ENGGINEER" color="#ffffff" width="0.6" wrap-count="20" position="-0.02 0 0.01" anchor="left" font="exo2bold"></a-text>
+                </a-entity>
+
+                <!-- Baris 3: CORE STACK -->
+                <a-entity class="entrance-element" position="0.3 0.05 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
+                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="1.1" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                    <a-text value="CORE STACK //" color="#b0b0b0" width="0.65" wrap-count="18" position="-0.5 0 0.01" anchor="left" font="exo2bold"></a-text>
+                    <a-text value="REACT - NODE.JS" color="#ffffff" width="0.6" wrap-count="18" position="-0.02 0 0.01" anchor="left" font="exo2bold"></a-text>
+                </a-entity>
+
+                <!-- Baris 4: LOCATION -->
+                <a-entity class="entrance-element" position="0.3 -0.09 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
+                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="1.1" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                    <a-text value="LOCATION //" color="#b0b0b0" width="0.65" wrap-count="18" position="-0.5 0 0.01" anchor="left" font="exo2bold"></a-text>
+                    <a-text value="INDONESIA - SUMATERA UTARA" color="#ffffff" width="0.6" wrap-count="26" position="-0.02 0 0.01" anchor="left" font="exo2bold"></a-text>
+                </a-entity>
+
+                <!-- Baris 5: FOCUS -->
+                <a-entity class="entrance-element" position="0.3 -0.23 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
+                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="1.1" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                    <a-text value="FOCUS //" color="#b0b0b0" width="0.65" wrap-count="18" position="-0.5 0 0.01" anchor="left" font="exo2bold"></a-text>
+                    <a-text value="HIGH-PERFORMANCE SYSTEMS" color="#ffffff" width="0.6" wrap-count="26" position="-0.02 0 0.01" anchor="left" font="exo2bold"></a-text>
+                </a-entity>
+
+
+                <!-- === TOMBOL TAUTAN INTERAKTIF (HUD Bawah - Bersandingan) === -->
+
+                <!-- Tombol 1: PORTFOLIO -->
+                <a-entity class="entrance-element" position="-0.4 -0.45 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 600; easing: easeOutBack; startEvents: show-element">
+                    <!-- Tooltip 3D -->
+                    <a-entity 
+                        id="tooltip-portfolio"
+                        position="0 0.13 0.02"
+                        scale="0 0 0"
+                        animation__show="property: scale; to: 0.8 0.8 0.8; dur: 200; easing: easeOutQuad; startEvents: show-tooltip"
+                        animation__hide="property: scale; to: 0 0 0; dur: 200; easing: easeOutQuad; startEvents: hide-tooltip">
+                        <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='48'><rect width='256' height='48' rx='8' fill='rgba(12,12,12,0.95)'/></svg>" width="0.5" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                        <a-text value="frmshbi.dev" align="center" width="1.0" color="#ffffff" position="0 0 0.01" font="exo2bold"></a-text>
+                    </a-entity>
+                    <!-- Tombol Utama -->
+                    <a-plane 
+                        class="clickable" 
+                        id="btn-portfolio" 
+                        data-url="https://www.frmshbi.dev/" 
+                        width="0.36" 
+                        height="0.12" 
+                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='80'><rect width='256' height='80' rx='15' fill='rgba(12,12,12,0.95)'/></svg>"
+                        position="0 0 0"
+                        material="shader: flat; transparent: true;">
+                    </a-plane>
+                    <a-text 
+                        value="PORTFOLIO" 
+                        align="center" 
+                        width="1.0" 
+                        color="#ffffff" 
+                        position="0 0 0.01"
+                        class="clickable"
+                        data-url="https://www.frmshbi.dev/"
+                        font="exo2bold">
+                    </a-text>
+                </a-entity>
+
+                <!-- Tombol 2: GITHUB -->
+                <a-entity class="entrance-element" position="0 -0.45 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 600; easing: easeOutBack; startEvents: show-element">
+                    <!-- Tooltip 3D -->
+                    <a-entity 
+                        id="tooltip-github"
+                        position="0 0.13 0.02"
+                        scale="0 0 0"
+                        animation__show="property: scale; to: 0.8 0.8 0.8; dur: 200; easing: easeOutQuad; startEvents: show-tooltip"
+                        animation__hide="property: scale; to: 0 0 0; dur: 200; easing: easeOutQuad; startEvents: hide-tooltip">
+                        <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='48'><rect width='256' height='48' rx='8' fill='rgba(12,12,12,0.95)'/></svg>" width="0.7" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                        <a-text value="github.com/firmashabibii" align="center" width="1.0" color="#ffffff" position="0 0 0.01" font="exo2bold"></a-text>
+                    </a-entity>
+                    <a-plane 
+                        class="clickable" 
+                        id="btn-github" 
+                        data-url="https://github.com/firmashabibii" 
+                        width="0.36" 
+                        height="0.12" 
+                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='80'><rect width='256' height='80' rx='15' fill='rgba(12,12,12,0.95)'/></svg>"
+                        position="0 0 0"
+                        material="shader: flat; transparent: true;">
+                    </a-plane>
+                    <a-text 
+                        value="GITHUB" 
+                        align="center" 
+                        width="1.0" 
+                        color="#ffffff" 
+                        position="0 0 0.01"
+                        class="clickable"
+                        data-url="https://github.com/firmashabibii"
+                        font="exo2bold">
+                    </a-text>
+                </a-entity>
+
+                <!-- Tombol 3: INSTAGRAM -->
+                <a-entity class="entrance-element" position="0.4 -0.45 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 600; easing: easeOutBack; startEvents: show-element">
+                    <!-- Tooltip 3D -->
+                    <a-entity 
+                        id="tooltip-instagram"
+                        position="0 0.13 0.02"
+                        scale="0 0 0"
+                        animation__show="property: scale; to: 0.8 0.8 0.8; dur: 200; easing: easeOutQuad; startEvents: show-tooltip"
+                        animation__hide="property: scale; to: 0 0 0; dur: 200; easing: easeOutQuad; startEvents: hide-tooltip">
+                        <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='48'><rect width='256' height='48' rx='8' fill='rgba(12,12,12,0.95)'/></svg>" width="0.6" height="0.1" material="shader: flat; transparent: true;"></a-plane>
+                        <a-text value="instagram.com/frmshbi" align="center" width="1.0" color="#ffffff" position="0 0 0.01" font="exo2bold"></a-text>
+                    </a-entity>
+                    <a-plane 
+                        class="clickable" 
+                        id="btn-instagram" 
+                        data-url="https://www.instagram.com/frmshbi/" 
+                        width="0.36" 
+                        height="0.12" 
+                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='80'><rect width='256' height='80' rx='15' fill='rgba(12,12,12,0.95)'/></svg>"
+                        position="0 0 0"
+                        material="shader: flat; transparent: true;">
+                    </a-plane>
+                    <a-text 
+                        value="INSTAGRAM" 
+                        align="center" 
+                        width="1.0" 
+                        color="#ffffff" 
+                        position="0 0 0.01"
+                        class="clickable"
+                        data-url="https://www.instagram.com/frmshbi/"
+                        font="exo2bold">
+                    </a-text>
+                </a-entity>
+
             </a-entity>
         </a-entity>
         
@@ -65,195 +245,7 @@
           id="custom-marker": Digunakan oleh JS untuk mendeteksi event markerFound/markerLost.
         -->
         <a-marker type="pattern" url="pattern-pening.patt" id="custom-marker" smooth="true" smoothCount="15" smoothTolerance="0.01" smoothThreshold="5">
-            
-            <!-- Grup Konten AR (Digeser 1.8 unit ke kanan agar melayang stabil di samping kanan pusat marker) -->
-            <a-entity 
-                id="ar-content"
-                position="1.8 0.5 0" 
-                rotation="-60 0 0"
-                animation="property: position; to: 1.8 0.7 0; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine">
-
-                <!-- === FOTO PROFIL CYBERPUNK (MELAYANG DI SEBELAH KIRI - BERSUDUT MELENGKUNG HALUS 15PX) === -->
-                <!-- Gambar Foto Profil Bersudut Bulat (Dengan Efek Hover Membesar) -->
-                <a-entity class="entrance-element" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 700; easing: easeOutBack; startEvents: show-element">
-                    <a-image 
-                        class="clickable" 
-                        src="profile_rounded.png" 
-                        width="1.0" 
-                        height="1.3" 
-                        position="-1.2 0 0" 
-                        material="shader: flat; transparent: true;"
-                        animation__mouseenter="property: scale; to: 1.1 1.1 1.1; dur: 200; easing: easeOutQuad; startEvents: mouseenter"
-                        animation__mouseleave="property: scale; to: 1 1 1; dur: 200; easing: easeOutQuad; startEvents: mouseleave">
-                    </a-image>
-                </a-entity>
-
-                <!-- === MODEL 3D MATA MONSTER PROSEDURAL (MENGEJAR ARAH KAMERA USER - 100% TAMPIL INSTAN & KOKOH) === -->
-                <a-entity class="entrance-element" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 800; easing: easeOutBack; startEvents: show-element">
-                    <!-- Entitas yang melacak arah kamera secara interaktif (look-at) -->
-                    <a-entity position="-1.2 0.95 0.1" look-at="#main-camera">
-                        <!-- Kelopak Mata Luar Gelap Cyberpunk -->
-                        <a-sphere color="#0c0c0c" radius="0.36" material="shader: flat;"></a-sphere>
-                        <!-- Sclera Bola Mata Putih Bersih -->
-                        <a-sphere color="#ffffff" radius="0.35" material="shader: flat;"></a-sphere>
-                        <!-- Iris Merah Menyala (Mengilap Cyberpunk) -->
-                        <a-sphere color="#ff0022" radius="0.14" position="0 0 0.28" material="shader: flat;"></a-sphere>
-                        <!-- Pupil Hitam Tajam di Tengah Iris -->
-                        <a-sphere color="#000000" radius="0.06" position="0 0 0.38" material="shader: flat;"></a-sphere>
-                        <!-- Pantulan Efek Kilau Cahaya Putih -->
-                        <a-sphere color="#ffffff" radius="0.02" position="0.06 0.06 0.40" material="shader: flat;"></a-sphere>
-                    </a-entity>
-                </a-entity>
-
-                <!-- === 5 BARIS PENJELASAN BIODATA (STRIP HITAM POLOS MELAYANG DENGAN BORDER RADIUS 15PX) === -->
-                
-                <!-- Baris 1: FULL NAME -->
-                <a-entity class="entrance-element" position="0.8 0.52 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
-                    <!-- Strip Utama Gelap (SVG Rounded rx="15") -->
-                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="2.1" height="0.18" position="0 0 0" material="shader: flat; transparent: true;"></a-plane>
-                    <!-- Label & Value diposisikan secara lokal relatif terhadap strip hitam (Aman 100% di dalam strip) -->
-                    <a-text value="FULL NAME //" color="#b0b0b0" width="1.1" wrap-count="18" position="-0.95 0 0.01" anchor="left" font="exo2bold"></a-text>
-                    <a-text value="FIRMAS HABIBI" color="#ffffff" width="1.0" wrap-count="16" position="-0.05 0 0.01" anchor="left" font="exo2bold"></a-text>
-                </a-entity>
-
-                <!-- Baris 2: ROLE -->
-                <a-entity class="entrance-element" position="0.8 0.26 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
-                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="2.1" height="0.18" position="0 0 0" material="shader: flat; transparent: true;"></a-plane>
-                    <a-text value="ROLE //" color="#b0b0b0" width="1.1" wrap-count="18" position="-0.95 0 0.01" anchor="left" font="exo2bold"></a-text>
-                    <a-text value="FULLSTACK ENGGINEER" color="#ffffff" width="1.0" wrap-count="20" position="-0.05 0 0.01" anchor="left" font="exo2bold"></a-text>
-                </a-entity>
-
-                <!-- Baris 3: CORE STACK -->
-                <a-entity class="entrance-element" position="0.8 0.00 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
-                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="2.1" height="0.18" position="0 0 0" material="shader: flat; transparent: true;"></a-plane>
-                    <a-text value="CORE STACK //" color="#b0b0b0" width="1.1" wrap-count="18" position="-0.95 0 0.01" anchor="left" font="exo2bold"></a-text>
-                    <a-text value="REACT - NODE.JS" color="#ffffff" width="1.0" wrap-count="16" position="-0.05 0 0.01" anchor="left" font="exo2bold"></a-text>
-                </a-entity>
-
-                <!-- Baris 4: LOCATION -->
-                <a-entity class="entrance-element" position="0.8 -0.26 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
-                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="2.1" height="0.18" position="0 0 0" material="shader: flat; transparent: true;"></a-plane>
-                    <a-text value="LOCATION //" color="#b0b0b0" width="1.1" wrap-count="18" position="-0.95 0 0.01" anchor="left" font="exo2bold"></a-text>
-                    <a-text value="INDONESIA - SUMATERA UTARA" color="#ffffff" width="1.0" wrap-count="26" position="-0.05 0 0.01" anchor="left" font="exo2bold"></a-text>
-                </a-entity>
-
-                <!-- Baris 5: FOCUS -->
-                <a-entity class="entrance-element" position="0.8 -0.52 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 500; easing: easeOutBack; startEvents: show-element">
-                    <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='512' height='64'><rect width='512' height='64' rx='15' fill='rgba(12,12,12,0.95)'/></svg>" width="2.1" height="0.18" position="0 0 0" material="shader: flat; transparent: true;"></a-plane>
-                    <a-text value="FOCUS //" color="#b0b0b0" width="1.1" wrap-count="18" position="-0.95 0 0.01" anchor="left" font="exo2bold"></a-text>
-                    <a-text value="HIGH-PERFORMANCE SYSTEMS" color="#ffffff" width="1.0" wrap-count="26" position="-0.05 0 0.01" anchor="left" font="exo2bold"></a-text>
-                </a-entity>
-
-
-                <!-- === TOMBOL TAUTAN INTERAKTIF (HITAM POLOS DENGAN BORDER RADIUS 15PX) === -->
-
-                <!-- Tombol 1: PORTFOLIO -->
-                <a-entity class="entrance-element" position="-1.05 -1.15 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 600; easing: easeOutBack; startEvents: show-element">
-                    <!-- Tooltip 3D (Muncul saat hover tombol Portfolio) -->
-                    <a-entity 
-                        id="tooltip-portfolio"
-                        position="0 0.28 0.05"
-                        scale="0 0 0"
-                        animation__show="property: scale; to: 0.8 0.8 0.8; dur: 200; easing: easeOutQuad; startEvents: show-tooltip"
-                        animation__hide="property: scale; to: 0 0 0; dur: 200; easing: easeOutQuad; startEvents: hide-tooltip">
-                        <!-- Background Tooltip Gelap -->
-                        <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='48'><rect width='256' height='48' rx='8' fill='rgba(12,12,12,0.95)'/></svg>" width="1.2" height="0.22" material="shader: flat; transparent: true;"></a-plane>
-                        <a-text value="frmshbi.dev" align="center" width="2.2" color="#ffffff" position="0 0 0.01" font="exo2bold"></a-text>
-                    </a-entity>
-                    <!-- Tombol Utama (SVG Rounded rx="15") -->
-                    <a-plane 
-                        class="clickable" 
-                        id="btn-portfolio" 
-                        data-url="https://www.frmshbi.dev/" 
-                        width="0.9" 
-                        height="0.28" 
-                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='80'><rect width='256' height='80' rx='15' fill='rgba(12,12,12,0.95)'/></svg>"
-                        position="0 0 0"
-                        material="shader: flat; transparent: true;">
-                    </a-plane>
-                    <!-- Teks Tombol diposisikan secara lokal tepat di tengah plane -->
-                    <a-text 
-                        value="PORTFOLIO" 
-                        align="center" 
-                        width="2.1" 
-                        color="#ffffff" 
-                        position="0 0 0.01"
-                        class="clickable"
-                        data-url="https://www.frmshbi.dev/"
-                        font="exo2bold">
-                    </a-text>
-                </a-entity>
-
-                <!-- Tombol 2: GITHUB -->
-                <a-entity class="entrance-element" position="0 -1.15 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 600; easing: easeOutBack; startEvents: show-element">
-                    <!-- Tooltip 3D (Muncul saat hover tombol GitHub) -->
-                    <a-entity 
-                        id="tooltip-github"
-                        position="0 0.28 0.05"
-                        scale="0 0 0"
-                        animation__show="property: scale; to: 0.8 0.8 0.8; dur: 200; easing: easeOutQuad; startEvents: show-tooltip"
-                        animation__hide="property: scale; to: 0 0 0; dur: 200; easing: easeOutQuad; startEvents: hide-tooltip">
-                        <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='48'><rect width='256' height='48' rx='8' fill='rgba(12,12,12,0.95)'/></svg>" width="1.2" height="0.22" material="shader: flat; transparent: true;"></a-plane>
-                        <a-text value="github.com/firmashabibii" align="center" width="2.2" color="#ffffff" position="0 0 0.01" font="exo2bold"></a-text>
-                    </a-entity>
-                    <a-plane 
-                        class="clickable" 
-                        id="btn-github" 
-                        data-url="https://github.com/firmashabibii" 
-                        width="0.9" 
-                        height="0.28" 
-                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='80'><rect width='256' height='80' rx='15' fill='rgba(12,12,12,0.95)'/></svg>"
-                        position="0 0 0"
-                        material="shader: flat; transparent: true;">
-                    </a-plane>
-                    <a-text 
-                        value="GITHUB" 
-                        align="center" 
-                        width="2.1" 
-                        color="#ffffff" 
-                        position="0 0 0.01"
-                        class="clickable"
-                        data-url="https://github.com/firmashabibii"
-                        font="exo2bold">
-                    </a-text>
-                </a-entity>
-
-                <!-- Tombol 3: INSTAGRAM -->
-                <a-entity class="entrance-element" position="1.05 -1.15 0" scale="0 0 0" animation="property: scale; to: 1 1 1; dur: 600; easing: easeOutBack; startEvents: show-element">
-                    <!-- Tooltip 3D (Muncul saat hover tombol Instagram) -->
-                    <a-entity 
-                        id="tooltip-instagram"
-                        position="0 0.28 0.05"
-                        scale="0 0 0"
-                        animation__show="property: scale; to: 0.8 0.8 0.8; dur: 200; easing: easeOutQuad; startEvents: show-tooltip"
-                        animation__hide="property: scale; to: 0 0 0; dur: 200; easing: easeOutQuad; startEvents: hide-tooltip">
-                        <a-plane src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='48'><rect width='256' height='48' rx='8' fill='rgba(12,12,12,0.95)'/></svg>" width="1.2" height="0.22" material="shader: flat; transparent: true;"></a-plane>
-                        <a-text value="instagram.com/frmshbi" align="center" width="2.2" color="#ffffff" position="0 0 0.01" font="exo2bold"></a-text>
-                    </a-entity>
-                    <a-plane 
-                        class="clickable" 
-                        id="btn-instagram" 
-                        data-url="https://www.instagram.com/frmshbi/" 
-                        width="0.9" 
-                        height="0.28" 
-                        src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='256' height='80'><rect width='256' height='80' rx='15' fill='rgba(12,12,12,0.95)'/></svg>"
-                        position="0 0 0"
-                        material="shader: flat; transparent: true;">
-                    </a-plane>
-                    <a-text 
-                        value="INSTAGRAM" 
-                        align="center" 
-                        width="2.1" 
-                        color="#ffffff" 
-                        position="0 0 0.01"
-                        class="clickable"
-                        data-url="https://www.instagram.com/frmshbi/"
-                        font="exo2bold">
-                    </a-text>
-                </a-entity>
-
-            </a-entity>
-            
+            <!-- Kosong secara visual, digeser ke kamera agar menjadi HUD mengambang statis di layar sebelah kiri -->
         </a-marker>
 
 

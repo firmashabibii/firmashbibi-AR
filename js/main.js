@@ -129,4 +129,37 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
     });
+
+    // 6. Logika Bola Mata Melirik Mengejar Gerakan Mouse / Touch secara Real-time
+    const pupilEl = document.getElementById('monster-pupil');
+    if (pupilEl) {
+        console.log('Sistem pelacakan pupil mata aktif!');
+        
+        // Pelacakan mouse pada desktop
+        window.addEventListener('mousemove', (e) => {
+            const mouseX = (e.clientX / window.innerWidth) * 2 - 1;
+            const mouseY = -(e.clientY / window.innerHeight) * 2 + 1;
+            
+            // Batasi pergeseran pupil maksimal 0.04 unit agar tetap di dalam sclera putih
+            const limitX = mouseX * 0.035;
+            const limitY = mouseY * 0.035;
+            
+            // Perbarui atribut posisi pupil secara real-time
+            pupilEl.setAttribute('position', `${-0.65 + limitX} ${0.55 + limitY} 0.05`);
+        });
+
+        // Pelacakan sentuhan jari pada mobile
+        window.addEventListener('touchmove', (e) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                const touchX = (touch.clientX / window.innerWidth) * 2 - 1;
+                const touchY = -(touch.clientY / window.innerHeight) * 2 + 1;
+                
+                const limitX = touchX * 0.035;
+                const limitY = touchY * 0.035;
+                
+                pupilEl.setAttribute('position', `${-0.65 + limitX} ${0.55 + limitY} 0.05`);
+            }
+        });
+    }
 });
