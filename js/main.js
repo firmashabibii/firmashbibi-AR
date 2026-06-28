@@ -85,4 +85,30 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     });
+
+    // 5. Menangani efek Hover Tooltip untuk 3 tombol tautan
+    const tooltipsMapping = [
+        { buttonId: 'btn-portfolio', tooltipId: 'tooltip-portfolio' },
+        { buttonId: 'btn-github', tooltipId: 'tooltip-github' },
+        { buttonId: 'btn-instagram', tooltipId: 'tooltip-instagram' }
+    ];
+
+    tooltipsMapping.forEach(mapping => {
+        const buttonEl = document.getElementById(mapping.buttonId);
+        const tooltipEl = document.getElementById(mapping.tooltipId);
+
+        if (buttonEl && tooltipEl) {
+            // Ketika kursor masuk (hover), picu animasi tampilkan tooltip
+            buttonEl.addEventListener('mouseenter', () => {
+                console.log(`Hover in: ${mapping.buttonId}`);
+                tooltipEl.emit('show-tooltip');
+            });
+
+            // Ketika kursor keluar, sembunyikan kembali tooltip
+            buttonEl.addEventListener('mouseleave', () => {
+                console.log(`Hover out: ${mapping.buttonId}`);
+                tooltipEl.emit('hide-tooltip');
+            });
+        }
+    });
 });
