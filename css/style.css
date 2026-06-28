@@ -10,14 +10,31 @@ html, body {
     -webkit-tap-highlight-color: transparent;
 }
 
-/* Memastikan canvas rendering A-Frame/AR.js berada di latar belakang */
+/* Memastikan canvas rendering A-Frame/AR.js berada di latar belakang secara fixed */
 canvas.a-canvas {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100% !important;
-    height: 100% !important;
-    z-index: 1;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    z-index: 1 !important;
+}
+
+/* 
+   Memaksa video kamera bawaan AR.js agar terbentang penuh secara responsif 
+   dan menutup seluruh layar (mencegah masalah layar putih terbelah di mobile)
+*/
+video, 
+#arjs-webcam-generator-video {
+    width: 100vw !important;
+    height: 100vh !important;
+    position: fixed !important;
+    top: 0 !important;
+    left: 0 !important;
+    object-fit: cover !important; /* Mengisi penuh layar dengan memotong proporsional */
+    margin: 0 !important;
+    padding: 0 !important;
+    z-index: -100 !important; /* Berada di belakang objek 3D dan UI */
 }
 
 /* 
