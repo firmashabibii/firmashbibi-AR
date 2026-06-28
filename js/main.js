@@ -20,37 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     console.log('Sistem WebAR terinisialisasi. Menunggu pemindaian marker kustom...');
 
-    // Fungsi pembantu untuk menggambar rounded rectangle pada canvas 2D
-    const drawRoundedRect = (canvasId, fillColor, radiusValue) => {
-        const canvas = document.getElementById(canvasId);
-        if (!canvas) return;
-        const ctx = canvas.getContext('2d');
-        const width = canvas.width;
-        const height = canvas.height;
-        
-        ctx.clearRect(0, 0, width, height);
-        ctx.fillStyle = fillColor;
-        ctx.beginPath();
-        ctx.moveTo(radiusValue, 0);
-        ctx.lineTo(width - radiusValue, 0);
-        ctx.quadraticCurveTo(width, 0, width, radiusValue);
-        ctx.lineTo(width, height - radiusValue);
-        ctx.quadraticCurveTo(width, height, width - radiusValue, height);
-        ctx.lineTo(radiusValue, height);
-        ctx.quadraticCurveTo(0, height, 0, height - radiusValue);
-        ctx.lineTo(0, radiusValue);
-        ctx.quadraticCurveTo(0, 0, radiusValue, 0);
-        ctx.closePath();
-        ctx.fill();
-    };
 
-    // Menggambar tekstur tombol bersudut melengkung (radius 18px dan 20px agar proporsional)
-    drawRoundedRect('button-bg-canvas', '#0c0c0c', 18);
-    drawRoundedRect('button-border-canvas', '#ff0022', 20);
-    
-    // Menggambar tekstur strip penjelasan bersudut melengkung (radius 12px dan 14px agar proporsional)
-    drawRoundedRect('strip-bg-canvas', '#0c0c0c', 12);
-    drawRoundedRect('strip-border-canvas', '#ff0022', 14);
 
     // 2. Event Listener ketika Custom Marker Terdeteksi oleh Kamera (markerFound)
     customMarker.addEventListener('markerFound', () => {
