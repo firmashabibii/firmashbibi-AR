@@ -33,216 +33,30 @@
         vr-mode-ui="enabled: false"
         renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
         
-        <!-- Asset Management System untuk efisiensi pemuatan aset -->
-        <a-assets>
-            <!-- Model 3D GLTF (Damaged Helmet sebagai model default yang futuristik & premium) -->
-            <!-- Anda bisa mengganti URL src ini dengan file lokal Anda, misal: "assets/laptop.gltf" -->
-            <a-asset-item id="model-3d" src="https://raw.githubusercontent.com/KhronosGroup/glTF-Sample-Models/master/2.0/DamagedHelmet/glTF-Binary/DamagedHelmet.glb"></a-asset-item>
-        </a-assets>
 
-        <!-- Custom Marker -->
+        <!-- Hiro Marker -->
         <!-- 
-          type="pattern": Menggunakan pattern marker khusus (.patt).
-          url="pattern-pening.patt": Mengarah ke file marker kustom di root proyek.
-          id="custom-marker": Digunakan oleh JS untuk mendeteksi event markerFound/markerLost.
+          preset="hiro": Menggunakan marker bawaan Hiro yang sangat stabil untuk AR.js.
+          id="custom-marker": Tetap dipertahankan agar logika JavaScript event listener tidak perlu diubah.
         -->
-        <a-marker type="pattern" url="pattern-pening.patt" id="custom-marker">
+        <a-marker preset="hiro" id="custom-marker">
             
-            <!-- Elemen Model 3D GLTF -->
+            <!-- Gambar Biodata 3D Mengambang -->
             <!-- 
-              gltf-model: Mereferensikan id aset (#model-3d).
-              position: Dimajukan ke depan (z = 0.5) agar tidak bertabrakan dengan panel biodata di belakangnya.
-              scale: Diatur sedikit lebih kompak agar komposisi visual seimbang.
-              animation: Animasi berputar dan levitasi.
-            -->
-            <a-gltf-model 
-                src="#model-3d" 
-                position="0 0.4 0.5" 
-                scale="0.45 0.45 0.45"
-                animation="property: rotation; to: 0 360 0; loop: true; dur: 8000; easing: linear"
-                animation__hover="property: position; to: 0 0.55 0.5; dir: alternate; loop: true; dur: 2000; easing: easeInOutSine">
-            </a-gltf-model>
-
-            <!-- Kartu Biodata 3D Mengambang (Sesuai Gambar Referensi Cyberpunk) -->
-            <!-- 
-              position: Diletakkan miring berdiri di belakang model GLTF.
+              src="biodata.png": Gambar biodata utuh yang diunggah oleh Anda.
+              position: Diletakkan sedikit melayang di atas marker.
               rotation: Kemiringan -60 derajat di sumbu X agar menghadap ke arah kamera user dengan nyaman.
               animation: Efek melayang (levitasi) naik-turun yang halus secara berulang.
             -->
-            <a-entity 
-                id="biodata-card" 
-                position="0 0.7 -0.3" 
+            <a-image 
+                src="biodata.png" 
+                width="3.4" 
+                height="1.6" 
+                position="0 0.6 0" 
                 rotation="-60 0 0"
-                animation="property: position; to: 0 0.75 -0.3; dir: alternate; loop: true; dur: 3000; easing: easeInOutSine">
-                
-                <!-- Panel Belakang (Glow Border Merah) -->
-                <!-- Lebih besar sedikit dari panel utama untuk menciptakan efek border merah menyala -->
-                <a-plane 
-                    width="3.44" 
-                    height="1.84" 
-                    color="#ff0022" 
-                    position="0 0 0" 
-                    material="roughness: 1; metalness: 0.1">
-                </a-plane>
-                
-                <!-- Panel Utama (Latar Belakang Hitam Pekat) -->
-                <a-plane 
-                    width="3.4" 
-                    height="1.8" 
-                    color="#0a0a0a" 
-                    position="0 0 0.01" 
-                    material="roughness: 0.8; metalness: 0.2">
-                </a-plane>
-
-                <!-- Frame Foto Profil (Border Merah) -->
-                <a-plane 
-                    width="1.06" 
-                    height="1.26" 
-                    color="#ff0022" 
-                    position="-1.0 0 0.02">
-                </a-plane>
-
-                <!-- Foto Profil Pengembang -->
-                <!-- Memuat berkas gambar profile.png yang telah disiapkan -->
-                <a-image 
-                    src="profile.png" 
-                    width="1.0" 
-                    height="1.2" 
-                    position="-1.0 0 0.03"
-                    material="alphaTest: 0.5">
-                </a-image>
-
-                <!-- === HEADER KARTU BIODATA === -->
-                <!-- "// BIODATA" -->
-                <a-text 
-                    value="// BIODATA" 
-                    color="#ff0022" 
-                    width="3.2" 
-                    position="-1.5 0.75 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-
-                <!-- "ID_FRM205" -->
-                <a-text 
-                    value="ID_FRM205" 
-                    color="#ff0022" 
-                    width="2.5" 
-                    position="1.5 0.75 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    align="right"
-                    anchor="right">
-                </a-text>
-
-                <!-- Garis Horizontal Pemisah (Gaya Futuristik/Cyberpunk) -->
-                <a-plane 
-                    width="3.0" 
-                    height="0.01" 
-                    color="#ff0022" 
-                    position="0 0.62 0.02">
-                </a-plane>
-
-                <!-- === DATA DETAIL (LABEL & NAMA) === -->
-
-                <!-- Baris 1: FULL NAME -->
-                <a-text 
-                    value="FULL NAME //" 
-                    color="#ff0022" 
-                    width="2.0" 
-                    position="-0.3 0.4 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-                <a-text 
-                    value="FIRMAS HABIBI" 
-                    color="#ffffff" 
-                    width="2.2" 
-                    position="0.3 0.4 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-
-                <!-- Baris 2: ROLE -->
-                <a-text 
-                    value="ROLE //" 
-                    color="#ff0022" 
-                    width="2.0" 
-                    position="-0.3 0.15 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-                <a-text 
-                    value="FULLSTACK ENGGINEER" 
-                    color="#ffffff" 
-                    width="2.2" 
-                    position="0.3 0.15 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-
-                <!-- Baris 3: CORE STACK -->
-                <a-text 
-                    value="CORE STACK //" 
-                    color="#ff0022" 
-                    width="2.0" 
-                    position="-0.3 -0.1 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-                <a-text 
-                    value="REACT - NODE.JS" 
-                    color="#ffffff" 
-                    width="2.2" 
-                    position="0.3 -0.1 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-
-                <!-- Baris 4: LOCATION -->
-                <a-text 
-                    value="LOCATION //" 
-                    color="#ff0022" 
-                    width="2.0" 
-                    position="-0.3 -0.35 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-                <a-text 
-                    value="INDONESIA - SUMATERA UTARA" 
-                    color="#ffffff" 
-                    width="2.2" 
-                    position="0.3 -0.35 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-
-                <!-- Baris 5: FOCUS -->
-                <a-text 
-                    value="FOCUS //" 
-                    color="#ff0022" 
-                    width="2.0" 
-                    position="-0.3 -0.6 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-                <a-text 
-                    value="HIGH-PERFORMANCE SYSTEMS &" 
-                    color="#ffffff" 
-                    width="2.2" 
-                    position="0.3 -0.55 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-                <a-text 
-                    value="INTERACTIVE APPS" 
-                    color="#ffffff" 
-                    width="2.2" 
-                    position="0.3 -0.72 0.02" 
-                    font="https://cdn.aframe.io/fonts/DejaVu-sdf.json"
-                    anchor="left">
-                </a-text>
-
-            </a-entity>
+                material="alphaTest: 0.5"
+                animation="property: position; to: 0 0.66 0; dir: alternate; loop: true; dur: 2500; easing: easeInOutSine">
+            </a-image>
             
         </a-marker>
 
@@ -259,7 +73,7 @@
 
     <!-- Petunjuk Kamera untuk User -->
     <div id="instruction-overlay">
-        Arahkan kamera ke <strong>Pattern Marker</strong> Anda
+        Arahkan kamera ke <strong>Marker Hiro</strong> Anda
     </div>
 
     <!-- Script JS Kustom untuk Logika UI -->
