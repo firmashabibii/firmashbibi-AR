@@ -10,32 +10,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
     
-    <!-- Monkey-patch untuk memaksa penggunaan kamera belakang (environment) secara mutlak pada perangkat seluler -->
-    <script>
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            const originalGetUserMedia = navigator.mediaDevices.getUserMedia.bind(navigator.mediaDevices);
-            navigator.mediaDevices.getUserMedia = function(constraints) {
-                if (constraints && constraints.video) {
-                    if (typeof constraints.video === 'boolean') {
-                        constraints.video = {
-                            facingMode: 'environment'
-                        };
-                    } else if (typeof constraints.video === 'object') {
-                        constraints.video.facingMode = { exact: 'environment' };
-                    }
-                }
-                return originalGetUserMedia(constraints).catch(error => {
-                    console.warn("Kamera belakang exact gagal/tidak ditemukan, mencoba fallback...", error);
-                    // Fallback jika tidak ada kamera belakang exact (seperti webcam laptop)
-                    if (constraints && constraints.video && constraints.video.facingMode) {
-                        constraints.video.facingMode = 'environment';
-                    }
-                    return originalGetUserMedia(constraints);
-                });
-            };
-        }
-    </script>
-    
+
     <!-- Framework A-Frame (Versi stabil untuk AR.js) -->
     <script src="https://aframe.io/releases/1.2.0/aframe.min.js"></script>
     
@@ -106,7 +81,7 @@
     <!-- Scene AR.js -->
     <a-scene 
         embedded 
-        arjs="sourceType: webcam; debugUIEnabled: false; facingMode: environment; smooth: true; smoothCount: 10; smoothTolerance: 0.02; smoothThreshold: 5;" 
+        arjs="sourceType: webcam; videoParameters: { facingMode: 'environment' }; debugUIEnabled: false; smooth: true; smoothCount: 10; smoothTolerance: 0.02; smoothThreshold: 5;" 
         vr-mode-ui="enabled: false"
         renderer="antialias: true; colorManagement: true; sortObjects: true;">
         
