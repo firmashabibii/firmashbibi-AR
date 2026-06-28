@@ -33,6 +33,11 @@
         vr-mode-ui="enabled: false"
         renderer="antialias: true; colorManagement: true; sortObjects: true;">
         
+        <!-- Asset Management System untuk mendefinisikan tekstur tombol rounded rect -->
+        <a-assets>
+            <canvas id="button-bg-canvas" width="256" height="80"></canvas>
+            <canvas id="button-border-canvas" width="264" height="88"></canvas>
+        </a-assets>
 
         <!-- Custom Marker -->
         <!-- 
@@ -64,21 +69,21 @@
                     material="shader: flat;">
                 </a-image>
 
-                <!-- === TOMBOL TAUTAN INTERAKTIF (CYBERPUNK GLASS STYLE) === -->
+                <!-- === TOMBOL TAUTAN INTERAKTIF (CYBERPUNK GLASS STYLE DENGAN SUDUT BULAT) === -->
 
                 <!-- Tombol 1: PORTFOLIO -->
-                <!-- Border Merah Menyala -->
-                <a-plane width="0.94" height="0.32" color="#ff0022" position="-1.05 -1.15 0.005" material="shader: flat"></a-plane>
-                <!-- Tombol Utama (Glassmorphism Gelap) -->
+                <!-- Border Merah Menyala Bulat -->
+                <a-plane src="#button-border-canvas" width="0.94" height="0.32" position="-1.05 -1.15 0.005" material="shader: flat; transparent: true;"></a-plane>
+                <!-- Tombol Utama (Glassmorphism Gelap Bulat) -->
                 <a-plane 
                     class="clickable" 
                     id="btn-portfolio" 
                     data-url="https://www.frmshbi.dev/" 
                     width="0.9" 
                     height="0.28" 
-                    color="#0c0c0c" 
+                    src="#button-bg-canvas"
                     position="-1.05 -1.15 0.01"
-                    material="shader: flat; opacity: 0.9; transparent: true">
+                    material="shader: flat; opacity: 0.95; transparent: true;">
                 </a-plane>
                 <!-- Teks Tombol (Menggunakan Font Default A-Frame agar Bebas CORS Error) -->
                 <a-text 
@@ -92,18 +97,18 @@
                 </a-text>
 
                 <!-- Tombol 2: GITHUB -->
-                <!-- Border Merah Menyala -->
-                <a-plane width="0.94" height="0.32" color="#ff0022" position="0 -1.15 0.005" material="shader: flat"></a-plane>
-                <!-- Tombol Utama (Glassmorphism Gelap) -->
+                <!-- Border Merah Menyala Bulat -->
+                <a-plane src="#button-border-canvas" width="0.94" height="0.32" position="0 -1.15 0.005" material="shader: flat; transparent: true;"></a-plane>
+                <!-- Tombol Utama (Glassmorphism Gelap Bulat) -->
                 <a-plane 
                     class="clickable" 
                     id="btn-github" 
                     data-url="https://github.com/firmashabibii" 
                     width="0.9" 
                     height="0.28" 
-                    color="#0c0c0c" 
+                    src="#button-bg-canvas"
                     position="0 -1.15 0.01"
-                    material="shader: flat; opacity: 0.9; transparent: true">
+                    material="shader: flat; opacity: 0.95; transparent: true;">
                 </a-plane>
                 <!-- Teks Tombol (Menggunakan Font Default A-Frame agar Bebas CORS Error) -->
                 <a-text 
@@ -117,18 +122,18 @@
                 </a-text>
 
                 <!-- Tombol 3: INSTAGRAM -->
-                <!-- Border Merah Menyala -->
-                <a-plane width="0.94" height="0.32" color="#ff0022" position="1.05 -1.15 0.005" material="shader: flat"></a-plane>
-                <!-- Tombol Utama (Glassmorphism Gelap) -->
+                <!-- Border Merah Menyala Bulat -->
+                <a-plane src="#button-border-canvas" width="0.94" height="0.32" position="1.05 -1.15 0.005" material="shader: flat; transparent: true;"></a-plane>
+                <!-- Tombol Utama (Glassmorphism Gelap Bulat) -->
                 <a-plane 
                     class="clickable" 
                     id="btn-instagram" 
                     data-url="https://www.instagram.com/frmshbi/" 
                     width="0.9" 
                     height="0.28" 
-                    color="#0c0c0c" 
+                    src="#button-bg-canvas"
                     position="1.05 -1.15 0.01"
-                    material="shader: flat; opacity: 0.9; transparent: true">
+                    material="shader: flat; opacity: 0.95; transparent: true;">
                 </a-plane>
                 <!-- Teks Tombol (Menggunakan Font Default A-Frame agar Bebas CORS Error) -->
                 <a-text 
