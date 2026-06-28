@@ -34,12 +34,13 @@
         renderer="logarithmicDepthBuffer: true; precision: medium; antialias: true;">
         
 
-        <!-- Hiro Marker -->
+        <!-- Custom Marker -->
         <!-- 
-          preset="hiro": Menggunakan marker bawaan Hiro yang sangat stabil untuk AR.js.
-          id="custom-marker": Tetap dipertahankan agar logika JavaScript event listener tidak perlu diubah.
+          type="pattern": Menggunakan pattern marker khusus (.patt).
+          url="pattern-pening.patt": Mengarah ke file marker kustom di root proyek.
+          id="custom-marker": Digunakan oleh JS untuk mendeteksi event markerFound/markerLost.
         -->
-        <a-marker preset="hiro" id="custom-marker">
+        <a-marker type="pattern" url="pattern-pening.patt" id="custom-marker">
             
             <!-- Gambar Biodata 3D Mengambang -->
             <!-- 
@@ -73,7 +74,7 @@
 
     <!-- Petunjuk Kamera untuk User -->
     <div id="instruction-overlay">
-        Arahkan kamera ke <strong>Marker Hiro</strong> Anda
+        Arahkan kamera ke <strong>Pattern Marker</strong> Anda
     </div>
 
     <!-- Script JS Kustom untuk Logika UI -->
