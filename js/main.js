@@ -98,16 +98,34 @@ document.addEventListener('DOMContentLoaded', () => {
         const tooltipEl = document.getElementById(mapping.tooltipId);
 
         if (buttonEl && tooltipEl) {
-            // Ketika kursor masuk (hover), picu animasi tampilkan tooltip
+            // Ketika kursor masuk (hover), picu animasi tampilkan tooltip dan beri feedback pada kursor visual
             buttonEl.addEventListener('mouseenter', () => {
                 console.log(`Hover in: ${mapping.buttonId}`);
                 tooltipEl.emit('show-tooltip');
+                
+                // Feedback visual pada kursor HTML (Membesar & Berubah Warna Hijau Stabil)
+                const cssCursor = document.getElementById('css-cursor');
+                if (cssCursor) {
+                    cssCursor.style.borderColor = '#10b981'; // Hijau Emerald
+                    cssCursor.style.width = '26px';
+                    cssCursor.style.height = '26px';
+                    cssCursor.style.boxShadow = '0 0 12px rgba(16, 185, 129, 0.7)';
+                }
             });
 
-            // Ketika kursor keluar, sembunyikan kembali tooltip
+            // Ketika kursor keluar, sembunyikan kembali tooltip dan kembalikan gaya kursor
             buttonEl.addEventListener('mouseleave', () => {
                 console.log(`Hover out: ${mapping.buttonId}`);
                 tooltipEl.emit('hide-tooltip');
+                
+                // Mengembalikan kursor HTML ke bentuk default
+                const cssCursor = document.getElementById('css-cursor');
+                if (cssCursor) {
+                    cssCursor.style.borderColor = 'rgba(255, 255, 255, 0.8)';
+                    cssCursor.style.width = '18px';
+                    cssCursor.style.height = '18px';
+                    cssCursor.style.boxShadow = '0 0 8px rgba(255, 255, 255, 0.5)';
+                }
             });
         }
     });

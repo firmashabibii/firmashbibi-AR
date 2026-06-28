@@ -44,8 +44,19 @@
             <a-asset-item id="monster-model" src="monster_eye.glb"></a-asset-item>
         </a-assets>
         
-        <!-- Kamera Scene AR dengan Detektor Raycast Sentuh Layar Langsung yang Stabil di Mobile -->
-        <a-entity id="main-camera" camera cursor="rayOrigin: mouse" raycaster="objects: .clickable; interval: 100;"></a-entity>
+        <!-- Kamera Scene AR dengan Raycaster Tengah Layar Tak Terlihat (Tidak Menghalangi Klik Jari) -->
+        <a-entity id="main-camera" camera>
+            <!-- 
+              Sinar raycast tak terlihat memancar tepat dari tengah kamera ke depan.
+              Tidak memiliki mesh 3D sehingga tidak menghalangi sentuhan jari di layar.
+              Mendukung kendali ganda: bidik otomatis selama 1.2 detik (fuse) atau ketukan layar langsung di mana saja.
+            -->
+            <a-entity 
+                cursor="fuse: true; fuseTimeout: 1200" 
+                raycaster="objects: .clickable; far: 10; interval: 50;"
+                position="0 0 -1">
+            </a-entity>
+        </a-entity>
         
         <!-- Custom Marker -->
         <!-- 
