@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // 2. Event Listener ketika Custom Marker Terdeteksi oleh Kamera (markerFound)
     customMarker.addEventListener('markerFound', () => {
-        console.log('Event: Marker ditemukan!');
+        console.log('Event: Marker ditemukan! Memulai animasi masuk berurutan...');
         
         // Memperbarui kelas styling pada Status Bar
         statusBar.classList.remove('status-searching');
@@ -32,11 +32,28 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Memperbarui teks pesan
         statusText.innerText = 'Marker Terdeteksi! Objek AR aktif';
+
+        // Memicu animasi masuk berurutan (staggered entrance) untuk setiap komponen melayang
+        const entranceElements = document.querySelectorAll('.entrance-element');
+        entranceElements.forEach((element, index) => {
+            // Bersihkan timeout sebelumnya jika ada agar tidak bentrok
+            if (element.entranceTimeout) {
+                clearTimeout(element.entranceTimeout);
+            }
+            
+            // Atur skala awal ke 0 0 0
+            element.setAttribute('scale', '0 0 0');
+            
+            // Jalankan animasi masuk dengan jeda bertahap (150 milidetik per elemen)
+            element.entranceTimeout = setTimeout(() => {
+                element.emit('show-element');
+            }, index * 150);
+        });
     });
 
     // 3. Event Listener ketika Custom Marker Hilang dari Pandangan Kamera (markerLost)
     customMarker.addEventListener('markerLost', () => {
-        console.log('Event: Marker hilang!');
+        console.log('Event: Marker hilang! Mereset animasi...');
         
         // Mengembalikan kelas styling ke status mencari
         statusBar.classList.remove('status-found');
@@ -44,6 +61,15 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Mengembalikan teks pesan ke pencarian default
         statusText.innerText = 'Mencari marker...';
+
+        // Mereset skala semua elemen menjadi 0 agar animasi terulang dari awal saat marker terdeteksi lagi
+        const entranceElements = document.querySelectorAll('.entrance-element');
+        entranceElements.forEach(element => {
+            if (element.entranceTimeout) {
+                clearTimeout(element.entranceTimeout);
+            }
+            element.setAttribute('scale', '0 0 0');
+        });
     });
 
     // 4. Menangani interaksi klik pada tombol tautan 3D (.clickable) di WebAR
